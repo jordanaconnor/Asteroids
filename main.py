@@ -3,6 +3,7 @@ from constants import *
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from shot import Shot
 
 def main():
     isRunnng = True
@@ -11,6 +12,8 @@ def main():
     updateable_group = pygame.sprite.Group()
     drawable_group = pygame.sprite.Group()
     asteroids_group = pygame.sprite.Group()
+    shots_group = pygame.sprite.Group()
+    Shot.containers = (shots_group, drawable_group, updateable_group)
     Player.containers = (updateable_group, drawable_group)
     Asteroid.containers = (asteroids_group, updateable_group, drawable_group)
     AsteroidField.containers = (updateable_group)
@@ -32,6 +35,16 @@ def main():
         screen.fill(color="black")
         
         updateable_group.update(dt)
+
+        for asteroid in asteroids_group:
+            if asteroid.collision(player) == True:
+                print("Game Over!")
+                isRunnng = False
+
+        for asteroid in asteroids_group:
+            for shot in shots_group:
+                if shot.collision(asteroid) == True:
+                    asteroid.split()
         
         for object in drawable_group:
             object.draw(screen)
