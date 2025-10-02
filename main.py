@@ -6,6 +6,8 @@ from asteroidfield import AsteroidField
 from shot import Shot
 
 def main():
+    pygame.font.init()
+
     isRunnng = True
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -25,6 +27,9 @@ def main():
 
     clock = pygame.time.Clock()
     dt = 0
+    score = 0
+    font = pygame.font.Font(None, 32)
+
 
     while isRunnng:
 
@@ -33,6 +38,8 @@ def main():
                 return
         
         screen.fill(color="black")
+        render_font = font.render(f"Score: {score}", True, "white")
+        screen.blit(render_font, (2, 2))
         
         updateable_group.update(dt)
 
@@ -45,6 +52,7 @@ def main():
             for shot in shots_group:
                 if shot.collision(asteroid) == True:
                     asteroid.split()
+                    score += 100
         
         for object in drawable_group:
             object.draw(screen)
